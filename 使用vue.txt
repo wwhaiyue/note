@@ -1,0 +1,88 @@
+一.简单的使用vue，直接引入vue.js文件
+
+二.使用vue-cli脚手架：
+
+1.使用vue-cli首先需要在node环境在使用
+
+  安装node.js：在node.js官网下载并安装node，安装过程简单，直接全是下一步就可以了（傻瓜式安装）；安装完后，打开命令行工具，输入node -v，出现版本号，则是安装成功
+
+  npm包管理器，是集成在node中的，所以直接输入npm -v，就会显示出npm的版本号。
+
+  node环境就安装完成了，npm包管理器也有了。因为有些资源被屏蔽或者是国外资源的原因，所以会导致npm安装依赖的时候失败，所以我们经常会用国内镜像--cnpm （淘宝镜像）：在命令行中输入npm install -g cnpm
+
+  安装脚手架：cnpm install -g vue-cli 全局安装；要创建项目，首先选定目录，然后再命令行中把目录转到选定的目录。cd到桌面；在桌面目录下，在命令行中运行命令vue init webpack myfirstVUE，这个命令的意思是初始化一个项目，其中webpack是构建工具，也就是整个项目是基于webpack的，myfirstVUE是整个项目文件夹的名称。
+
+  安装项目所需的依赖：要安装依赖包，首先cd到项目文件夹就是myfirstVUE，然后运行cnpm install，等待安装。安装完成之后，myfirstVUE文件夹中多一个node_modules文件夹，这里边就是我们项目需要的依赖包资源。安装完依赖包之后，就可以运行真个项目了（！！！如果忘安装外部文件，需要删除依赖，按完文件后再按装依赖！！！）
+
+  运行项目：npm run dev（新版的vue是npm run server），项目运行成功后在浏览器输入localhost：8080，就会看见vue界面。
+
+vue中引入外部文件：公共样式的直接在main.js中用import引入
+import './assets/css/rset.css'
+import './assets/js/useRem.js'
+公用方法，后期再各个组件中调用，需要新建一个base.js的文件，放在与main.js同级的位置。
+base.js里边的内容
+exports.install = function (Vue, options) {
+  // 提示框
+  Vue.prototype.pupUp = function (title) {
+    var tips = document.getElementById('tips');
+    tips.innerHTML=title;
+    tips.style.display = 'block';
+    var timer = null;
+    timer = setTimeout(function () {
+      tips.style.display = 'none';
+    }, 3000)
+  };
+};
+
+在main.js引入base.js：
+  // 引入公共函数
+  import base from './base'
+  Vue.use(base);
+
+（！！！环境搭建步骤：打开git ，运行 npm install --global vue-cli 这是安装vue的命令行
+vue init webpack vue-demo 这是vue基于webpack的模板项目
+cd vue-demo 进入vue-demo文件夹
+npm install 安装package.json中依赖的node_modules
+npm run dev 运行该项目！！！）
+
+三.父子通信：
+1.父传子：
+组件（component）是vue.js最强大的功能之一。
+组件可以扩展HTML元素，封装可重用的代码。在较高层面上，组件是自定义元素，所有的vue组件同时也都是vue的实例，所以可接受相同的选项对象（除了一些根级特有的选项）并提供相同的生命周期钩子。
+https://www.cnblogs.com/mophy/p/8590291.html（有例子）
+
+子组件与父组件之间传值：（父传子，子传父）https://www.cnblogs.com/daiwenru/p/6694530.html
+
+父组件向子组件传值成功
+总结：
+子组件在props中创建一个属性，用以接收父组件传过来的值
+父组件中注册子组件
+在子组件标签中添加子组件props中创建的属性
+把需要传给子组件的值赋给该属性
+
+子组件向父组件传值成功
+总结：
+子组件中需要以某种方式例如点击事件的方法来触发一个自定义事件
+将需要传的值作为$emit的第二个参数，该值将作为实参传给响应自定义事件的方法
+在父组件中注册子组件并在子组件标签上绑定对自定义事件的监听
+（父组件可以使用 props 把数据传给子组件。
+子组件可以使用 $emit 触发父组件的自定义事件。
+vm.$emit( event, arg ) //触发当前实例上的事件
+vm.$on( event, fn );//监听event事件后运行 fn； ）
+
+vue后台数据交互：https://blog.csdn.net/benben513624/article/details/78562529
+
+vue-router：路由跳转
+首先配置路由：如果你在安装vue-cli过程中router打对号了，就已经安装上了，；（如果没有，在命令行工具里先cd到项目路径下，在输入npm install vue-router --save-dev回车安装，）安装完成，引入路由模块 import VueRouter from "vue-router",使用路由Vue.use(VueRouter ),在其下面配置路由 const router=new VueRouter ({
+    routes:[
+            {path：”/”,component：Home}//路由的地址，抓到路由的地址后，调用component跳转到一个地址
+            ]
+})
+在router文件夹下index.js里进行的。
+注意：path后面的内容要与router-link to=""里的内容一致。在router文件夹下index.js里要导入你要跳转的页面，import Home from"@/components/Home"。router-view相当一个插槽，跳转页面里的内容在它里面呈现
+
+
+
+
+
+              
